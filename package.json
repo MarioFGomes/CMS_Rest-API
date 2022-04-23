@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "jshint": "node ./node_modules/jshint/bin/jshint App/Models/Usuario.js",
+    "testes": "node ./node_modules/jasmine/bin/jasmine.js spec/*/*spec.js",
+    "mocha":"node ./node_modules/mocha/bin/mocha spec/TDD.spec.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -12,6 +15,10 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
-    "mysql": "*"
+    "mysql": "*",
+    "jshint":"*",
+    "jasmine": "*",
+    "chai": "^4.3.6",
+    "mocha": "^9.2.2"
   }
 }
