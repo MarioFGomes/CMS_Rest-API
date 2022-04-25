@@ -7,7 +7,7 @@ this.login="";
 this.senha="";
 this.email="";
 var query="";
-this.Salvar=function(){
+this.Salvar=function(callback){
 
     if(this.nome=="" || this.nome==undefined){
         console.log("Nome de usuario é obrigatorio");
@@ -29,27 +29,75 @@ this.Salvar=function(){
         query="INSERT INTO cms.usuarios(nome,login,senha,email) VALUES('"+this.nome+"','"+this.login+"','"+this.senha+"','"+this.email+"')";
         App.banco.cnn.exec(query,function(results,error){
             if(error!=undefined){
-                console.log("Erro ao salvar dados do usuario");
+             
+                callback.call(null,{error:true});
             }else{
-                console.log("Usuario cadastrado com sucesso");
-            }
-        });
-    }else{
-        query="update cms.usuarios set nome='"+this.nome+"', login='"+this.login+"', senha='"+this.senha+"',email='"+this.email+"' where idusuarios='"+this.ID+"'";
-        App.banco.cnn.exec(query,function(results,error){
-            if(error!=undefined){
-                console.log("Erro ao atualizar dados do usuario");
-            }else{
-                console.log("Usuario atualizado com sucesso");
+       
+                callback.call(null,{error:false});
             }
         });
     }
+    
+};
+
+this.Atualizar=function(callback){
+var query="update cms.usuarios set nome='"+this.nome+"', login='"+this.login+"', senha='"+this.senha+"',email='"+this.email+"' where idusuarios='"+this.ID+"'";
+        App.banco.cnn.exec(query,function(results,error){
+            if(error!=undefined && error!=null){
+               
+                callback.call(null,{error:true});
+            }else{
+               
+                callback.call(null,{error:false});
+            }
+        });
+    
+}
+
+
 };
 
 
-};
+ Usuario.ExcluirTodos=function(callback){
+
+    query="delete from cms.usuarios";
+    App.banco.cnn.exec(query,function(results,error){
+        if(error!=undefined && error!=null){
+          
+            callback.call(null,{error:true});
+        }else{
+           
+            callback.call(null,{error:false});
+        }
+    });
+ }
 
 
+ Usuario.Todos=function(callback){
 
+    query="select * from cms.usuarios";
+    App.banco.cnn.exec(query,function(results,error){
+        if(error!=undefined && error!=null){
+            callback.call(null,{error:true});
+        }else{
+           
+            callback.call(null,{error:false,usuarios:results});
+        }
+    });
+ }
+
+ 
+ Usuario.BuscarPornome=function(nome,callback){
+    console.log(nome);
+    query="SELECT * FROM cms.usuarios where nome like '%"+nome+"%'";
+    App.banco.cnn.exec(query,function(results,error){
+        if(error!=undefined && error!=null){
+            callback.call(null,{error:true});
+        }else{
+           
+            callback.call(null,{error:false,usuarios:results});
+        }
+    });
+ }
 
 module.exports = Usuario;
