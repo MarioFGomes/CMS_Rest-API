@@ -1,11 +1,21 @@
 var App= require('../Config/db');
 
-var Usuario=function(){ 
+var Usuario=function(usuarios){ 
+
+if(usuarios!==undefined && usuarios!==""){
+this.ID=usuarios.idusuarios;
+this.nome=usuarios.nome;
+this.login=usuarios.login;
+this.senha=usuarios.senha;
+this.email=usuarios.email;
+}else{
 this.ID=0;
 this.nome="";
 this.login="";
 this.senha="";
 this.email="";
+}
+
 var query="";
 this.Salvar=function(callback){
 
@@ -73,6 +83,20 @@ var query="update cms.usuarios set nome='"+this.nome+"', login='"+this.login+"',
  }
 
 
+ 
+ Usuario.ExcluirPorID=function(id,callback){
+
+    query="delete from cms.usuarios where  idusuarios="+id+"";
+    App.banco.cnn.exec(query,function(results,error){
+        if(error!=undefined && error!=null){
+          
+            callback.call(null,{error:true});
+        }else{       
+            callback.call(null,{error:false});
+        }
+    });
+ }
+
  Usuario.Todos=function(callback){
 
     query="select * from cms.usuarios";
@@ -88,8 +112,22 @@ var query="update cms.usuarios set nome='"+this.nome+"', login='"+this.login+"',
 
  
  Usuario.BuscarPornome=function(nome,callback){
-    console.log(nome);
+  
     query="SELECT * FROM cms.usuarios where nome like '%"+nome+"%'";
+    App.banco.cnn.exec(query,function(results,error){
+        if(error!=undefined && error!=null){
+            callback.call(null,{error:true});
+        }else{
+           
+            callback.call(null,{error:false,usuarios:results});
+        }
+    });
+ }
+
+
+ Usuario.BuscarPorID=function(id,callback){
+
+    query="SELECT * FROM cms.usuarios where  idusuarios="+id+"";
     App.banco.cnn.exec(query,function(results,error){
         if(error!=undefined && error!=null){
             callback.call(null,{error:true});
